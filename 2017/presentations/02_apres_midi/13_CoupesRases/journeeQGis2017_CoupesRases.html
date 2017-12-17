@@ -1,0 +1,384 @@
+<!doctype html>
+<html>
+        <head>
+                <meta charset="iso-latin-1">
+                <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+                <title>Évolution de l'outil Coupes Rases</title>
+
+                <link rel="stylesheet" href="css/reveal.css">
+                <link rel="stylesheet" href="css/theme/skytetis2.css">
+
+                <!-- Theme used for syntax highlighting of code -->
+                <link rel="stylesheet" href="lib/css/zenburn.css">
+
+                <!-- Printing and PDF exports -->
+                <script>
+                        var link = document.createElement( 'link' );
+                        link.rel = 'stylesheet';
+                        link.type = 'text/css';
+                        link.href = window.location.search.match( /print-pdf/gi ) ? 'css/print/pdf.css' : 'css/print/paper.css';
+                        document.getElementsByTagName( 'head' )[0].appendChild( link );
+                </script>
+        </head>
+        <body>
+                <div class="reveal">
+                        <div class="slides">
+                        
+<!-- Titre du diaporama -->                        
+<section>
+  <h2><strong>Evolution de l'outil coupes rases</strong><br>de la création de la méthode à l'automatisation</h2>
+  <p>&nbsp;</p>
+  <h3>Rencontres des Utilisateurs Francophones de QGIS</h3>
+  <p>Vendredi 15 Décembre 2017 - Montpellier</p>
+  <p>&nbsp;</p>
+  <p><i>présenté par</i> Kenji Ose, Rémi Cresson et Nicolas Moyroud</p>
+  <p>Irstea - UMR TETIS</p>
+</section>
+
+<!-- Presentation du contexte -->
+<section>
+  <h2>Vous avez dit "coupes rases" ?</h2>
+  <!-- Definition des coupes rases -->
+  <section>
+      <blockquote>"Désigne en sylviculture un mode d'aménagement sylvicole passant par l'abattage de la totalité des arbres d'une parcelle d'une exploitation forestière"*</blockquote>
+      <p><small>*<i>(Wikipedia, 2014)</i></small></p>
+      <p><img alt="img1_coupesRases" src="img/Gordon_River_Clearcut.jpg" height="200" />
+      <p><small><i>Coupes rases dans la "Gordon River Valley", Colombie-Britannique (T.J. Watt, Wikipedia 2017)</i></small></p>      
+  </section>
+
+  <!-- Réglementation des coupes rases -->
+  <section>
+  <h3>Bases réglementaires</h3>
+  <h4>Code Forestier</h4>
+  <p><strong>Obligation d'autorisation (L124-5, L312-9, L312-10, R312-19 &agrave; 21)</strong></p>
+  <ul><small>
+    <li>Porte sur les terrains ne disposant pas de garantie de gestion durable, pour les coupes d'une surface supérieure à un seuil fixé au niveau du département, prélevant plus de la moitié des arbres de futaie.</li>
+    <li>Toute coupe effectuée en méconnaissance des dispositions des articles 124-5 et 312-9 est une coupe illicite et abusive (L312-11).</li>
+    <li>La demande d'autorisation doit être adressée 4 mois avant le début de la coupe. A défaut de réponse de l'administration dans ce délai, l'autorisation est réputée accordée.</li></small>
+  </ul>
+  <p><strong>Reconstitution après coupe (L124-6)</strong></p>
+  <ul><small>
+    <li>Pour les massifs et les coupes rases d'une surface dépassant un seuil fixé au niveau départemental, les propriétaires doivent prendre, dans un délai de 5 ans après la coupe définitive, les mesures nécessaires pour assurer le renouvellement des peuplements forestier en l'absence d'une régénération satisfaisante.</li></small>
+  </ul>
+  <p><strong>Régimes de sanction (L163-2, L362-1 et D312-22)</strong></p>
+  <ul><small>
+    <li>Pour la non-reconstitution après coupe rase : amende de 1 200&euro; par hectare exploité avec un délai de prescription d'un an.</li>
+    <li>Pour une coupe abusive : amende de 20 000&euro; par hectare pour les deux premiers hectares puis 60 000&euro; par hectare supplémentaire.</li>
+    <li>Cette amende peut être accompagnée de peines complémentaires, avec un délai de prescription de trois ans.</li></small>
+  </ul>
+  </section>
+
+  <!-- Missions des services de l'Etat -->
+  <section>
+    <h3>Missions des services de l'Etat</h3>
+    <h4>Feuille de route adressée le 16/12/2011 aux Préfets de région et de département</h4>
+      <p><strong>DRAAF</strong></p>
+        <ul>
+          <li>Établir des plans de contrôle prenant en compte le niveau de risque sur les territoires, notamment en s’assurant du respect des obligations de retour à l’état boisé après coupe.</li>
+        </ul>
+      <p><strong>DDT</strong></p>
+        <ul>
+          <li>Appliquer les outils régaliens permettant d’assurer une gestion durable, dynamique, ce qui suppose l’instruction des demandes (autorisations de coupes…), le contrôle des mises en œuvre et la constatation des infractions</li>
+          <li>Contrôler les plans simples de gestion (PSG) et leur mise en œuvre</li>
+       </ul>
+  </section>
+
+  <!-- Constat des services -->  
+  <section>
+    <h3>Constat</h3>
+      <ul>
+         <li>Jusqu’à maintenant, les contrôles concernant le respect des dispositions réglementaires en matière de coupes ont principalement été réalisés sur <strong>délation</strong> ou en <strong>ciblant des massifs réputés « sensibles »</strong>.</li>
+         <li>Ce mode de fonctionnement ne permet pas l’élaboration de <strong>plans de contrôle</strong> prenant en compte le niveau de risque sur le territoire…</li>
+      </ul>
+  </section>
+</section>
+
+<!-- convention MAA Irstea -->
+<section>
+  <h2>Les besoins du Ministère</h2>
+  
+    <!-- Objectifs Irstea pour MAA -->
+    <section>
+      <h3>Objectif</h3>
+      <p>Produire une cartographie annuelle des coupes rases en France</p>
+    </section>
+    
+    <!-- Spec MMA : techniques -->
+    <section>
+      <h3>Spécifications techniques</h3>
+      
+      <!-- tableau -->
+        <table>
+          <tbody>
+            <tr>
+              <td><strong>Détection annuelle</strong></td>
+            </tr>
+            <tr>
+              <td><strong>Précision thématique</strong></td>
+              <td>Taux d'omission/commission < 10% en surface</td>
+            </tr>
+            <tr>
+              <td><strong>Précision géographique</strong></td>
+              <td>UMC : 1 ha ; Précision planimétrique : 5~10 m</td>
+            </tr>
+            <tr>
+              <td><strong>Système de projection</strong></td>
+              <td>RGF93 - Lambert 93</td>
+            </tr>
+        </tbody>
+      </table>
+    </section>
+    
+    <!-- Spec MAA : contraintes -->
+    <section>
+      <h3>Contraintes de mise en oeuvre</h3>
+      <ul>
+        <li>Utiliser des données gratuites (si possible)</li>
+        <li>Transférer la méthode auprès des services SIG des DRAAF et DDT</li>
+        <li>Utiliser le logiciel <strong>QGis</strong></li>
+        <li>Déployer à terme la méthode à l'échelle nationale</li>
+      </ul>
+    </section>
+</section>
+
+<!-- Presentation de la methode -->
+<section>
+  <h2>2012-2015 : Méthode bi-date</h2>
+  
+  <!-- Opportunités Geosud -->
+  <section>
+    <h3>Exploitation de l'imagerie Geosud</h3>
+      <h4>une photographie du territoire depuis 2010</h4>
+      <ul>
+        <li>RapidEye, Spot5, Spot6 et Spot7</li>
+        <li>Hétérogénéité spatiale, spectrale et radiométrique</li>
+      </ul>
+  </section>
+  
+  <!-- Description de la méthode bi-date -->
+  <section>
+    <h3>Détection et qualification des changements</h3>
+      <p><img class="plain" alt="Etapes de traitement" src="img/clearCutChain.png" width="400" /><br>
+	  <img class="plain" alt="Etapes de traitement 2" src="img/clearCutChain2.png" width="500" /></p>
+  </section>
+  
+  <!-- Prise en main de la méthode sous QGis -->
+  <section>
+    <h3>Transfert sur QGis</h3>
+      <ul>
+        <li>un guide méthodologique (théorie + pratique sur QGis)</li>
+        <small>http://ids.equipex-geosud.fr/web/guest/fiches-pratiques-et-guides-methodologiques</small>
+        <li>un plugin QGis "Geosud TOA Reflectance"</li>
+        <small>https://plugins.qgis.org/plugins/geosudRefToa/</small>
+        <li>des formations AgroParisTech labellisées MAA</li>
+      </ul>
+      <p><img alt="Guide methodo" src="img/couvGuide.png" height="225" />                <img alt="plugin TOA" src="img/pluginToa.png" height="225" /></p>
+  </section>
+  <section>
+    <p><img alt="Guide methodo" src="img/CoupesRases_Chaine_v3.png" height="500"/></p> <!--height="225" /></p> -->
+  </section>
+  
+  <!-- Bilan sur le déploiement de la méthode -->
+  <section>
+     <h3>Bilan : un contexte favorable au déploiement</h3>
+       <ul>
+         <li>Formation : 52 personnes (20 DDT, 11 DRAAF + CNPF/CRPF, etc.)</li>
+         <li>Application : 12% des demandes Geosud depuis 2016</li>
+       </ul>
+       <img alt="Guide methodo" src="img/formCoupesRasesTr.png" height="350" />
+  </section>
+  
+  <!-- Retours des utilisateurs -->
+  <section>
+     <h3>Retour des utilisateurs</h3> 
+       <ul>
+       <h4>Avantages</h4>
+         <li>Bonne précision thématique</li>
+         <li>Gain de temps</li>
+         <li>Efficacité des contrôles</li>
+         <p></p>
+       <h4>Inconvénients</h4>
+         <li>Complexité de la méthode = risque d'erreur</li>
+         <li>Téléchargement des images</li>
+         <li>Stockage et temps de calcul</li>
+       </ul>
+  </section>
+</section>
+
+<!-- Outils OTB -->
+<section>
+  <h2>2015 : transition vers Orfeo Toolbox</h2>
+  
+  <!-- Description de la commande OTB -->
+  <section>
+    <h3>Développement d'un module externe</h3>
+    <h4>Automatisation de la chaîne de traitements sous forme d'application OTB</h4>
+    <p>https://github.com/remicres/ClearCutsDetection</p>
+    <p>otbcli_ClearCutsDetection</p>
+    <pre><code data-trim data-noescape>
+      -inbmask  <string>         Input vector data for T0 Image mask (Before)  (optional, off by default)
+      -inamask  <string>         Input vector data for T1 Image mask (After)  (optional, off by default)
+      -inb      <string>         Input T0 Image (Before)  (mandatory)
+      -ina      <string>         Input T1 Image (After)  (mandatory)
+      -masksdir <string>         Vegetation masks directory  (optional, off by default)
+      -nirb     <int32>         near infrared band index for input T0 image  (mandatory, default value is 4)
+      -redb     <int32>         red band index for input T0 image  (mandatory, default value is 1)
+      -nira     <int32>         near infrared band index for input T1 image  (mandatory, default value is 4)
+      -reda     <int32>         red band index for input T1 image  (mandatory, default value is 1)
+      -filt     <int32>         Minimum number of pixels detected  (mandatory, default value is 10)
+      -outvec   <string>         Output vector layer  (mandatory)
+    </code></pre>
+  </section>
+  
+  <!-- Appel via le processing toolbox -->
+  <section>
+    <h3>Intégration dans QGis</h3>
+    <p>Ajouter un fichier .xml dans QGis</p>
+    <p><small>dossier /usr/share/qgis/python/plugins/processing/algs/otb/description/5.XXX/<br><i>(remplacer XXX par le numéro de version)</i></small></p>
+    <pre><code data-trim data-noescape>
+    &lt;root&gt;
+  &lt;key&gt;ClearCutsDetection&lt;/key&gt;
+  &lt;exec&gt;otbcli_ClearCutsDetection&lt;/exec&gt;
+  &lt;longname&gt;Clear Cuts Detection&lt;/longname&gt;
+  &lt;group&gt;Feature Extraction&lt;/group&gt;
+  &lt;description&gt;performs cuts detection, from two input images and an optional forest mask&lt;/description&gt;
+  &lt;parameter&gt;
+    &lt;parameter_type source_parameter_type="ParameterType_InputImage"&gt;ParameterRaster&lt;/parameter_type&gt;
+    &lt;key&gt;inb&lt;/key&gt;
+    &lt;name&gt;Input T0 Image&lt;/name&gt;
+    &lt;description&gt;Input T0 Image.&lt;/description&gt;
+    &lt;optional&gt;False&lt;/optional&gt;
+  &lt;/parameter&gt;
+  ...
+    </code></pre>
+  </section>
+  
+  <!-- Interfacage sous QGis -->
+  <section>
+    <h3>Intégration dans QGis</h3>
+    <p>Outil accessible via la boîte à outils de traitements</p>
+    <p><img alt="Process Toolbox" src="img/processOtbClearCut.png" height="200" /> 
+	<img class="plain" alt="fleche" src="img/fleche.png" height="50"/> 
+	<img alt="Otb window" src="img/processOtbClearCutWin.png" height="300" /></p>
+  </section>
+</section>
+
+<!-- Approche série temporelle -->
+<section>
+  <h2>2017-2018 : Nouvelle approche</h2>
+  <!-- Description de Sentinel-2 -->
+  <section>
+    <h3>Arrivée de Sentinel-2</h3>
+      <h4>Spécifications techniques</h4> 
+    <ul>
+      <li>Résolution spatiale de 10 à 60 m</li>
+      <li>Capteur optique multi-spectral</li>
+      <li>Répétitivité de 5 jours avec S2-A et S2-B</li>
+    </ul>
+	<p><img class="plain" alt="sentinel2" src="img/sentinel2.png" height="200"/></p>
+  </section>
+  
+  <!-- Avantages et inconvénients -->
+  <section>
+    <ul>    
+      <h4>Inconvénients</h4>
+      <li>Volume des données</li>
+	  <small>2 Go la tuile compressée, 91 tuiles en France, 4 acquisitions/tuile/mois</small>
+	  <li>Téléchargement ? Stockage ?</li>
+      <li>Capacités de calcul ?</li>
+      <p></p>
+      <h4>Opportunités</h4>
+	  <li>Cartographie nationale</li>
+      <li>Fiabiliser la détection des coupes rases</li>
+      <li>Dater les coupes</li>
+      <li>Service quasi temps réel</li>
+    </ul>
+  </section>
+  
+  <!-- Description de la nouvelle méthode -->
+  <section>
+    <h3>Développement d'une nouvelle méthode</h3>
+	<ul>
+    <li>Analyse du signal dans le temps</li>
+	<img class="plain" alt="graphique" src="img/signalTemp.png" height="200"/>
+    <li>Création d'une application externe OTB dédiée</li>
+	</ul>
+  </section>
+  
+  <!-- Calcul sur serveur -->
+  <section>
+    <h3>Déploiement sur serveur</h3>
+    <ul>
+	<h4>Calcul distant</h4>
+	<li>Téléchargement automatique des données</li>
+    <li>Calcul des primitives</li>
+    <li>Cartographie des coupes rases</li>
+	<p></p>
+	<h4>Client Web</h4>
+	<li>Diffusion via une infrastructure dédiée</li>
+	</ul>
+  </section>
+</section>
+
+<!-- Diffusion et telechargement via une infra web dediee (Nico) -->
+<section>
+<h2>Diffusion sur une infrastructure web</h2>
+<section>
+  <h3>Architecture générale</h3>
+    <p>Automatisation de l'intégration des résultats dans PostGIS <small>script ogr2ogr traitant ~90 SHP en 1 minute, table finale ~1.5M de polygones avec index spatial</small></p>
+    <p>Symbologie avec QGIS et diffusion WMS avec QGIS Server</p>
+    <p>Mise en cache de tuiles avec Mapcache</p>
+    <p>Réalisation d'une interface cartographique OpenLayers<small> avec affichage des informations getFeatureInfo dans une popup</small></p>
+  </ul>
+</section>
+
+<section>
+  <p><img alt="client_web_CoupesRases_1" src="img/client_web_coupesrases_1.png" height="500" /></p>
+</section>
+<section>
+  <p><img alt="client_web_CoupesRases_2" src="img/client_web_coupesrases_2.png" height="500" /></p>
+</section>
+<section>
+  <p><img alt="client_web_CoupesRases_3" src="img/client_web_coupesrases_3.png" height="500" /></p>
+</section>
+
+<section>
+  <h3>Évolutions futures</h3>
+  <ul>
+    <p>Hébergement sur une plate-forme accessible aux utilisateurs, avec gestion des droits d'accès</p>
+    <p>Automatisation de l'ajout de couvertures annuelles (avec gestion de l'historique)</p>
+    <p>Gestion de la diffusion des couches dans QGIS-Server avec LizMap Plugin</p>
+    <p>Réalisation de l'interface cartographique avec LizMap Web Client</p>
+    <p>Ajout d'une couche heatmap représentant la densité de polygones pour les faibles niveau de zoom</p>
+  </ul>
+</section>
+</section>
+
+                        </div>
+
+
+                </div>
+
+                <script src="lib/js/head.min.js"></script>
+                <script src="js/reveal.js"></script>
+
+                <script>
+                        // More info about config & dependencies:
+                        // - https://github.com/hakimel/reveal.js#configuration
+                        // - https://github.com/hakimel/reveal.js#dependencies
+                        Reveal.initialize({
+                                dependencies: [
+                                        { src: 'plugin/markdown/marked.js' },
+                                        { src: 'plugin/markdown/markdown.js' },
+                                        { src: 'plugin/notes/notes.js', async: true },
+                                        { src: 'plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } }
+                                ],
+                                slideNumber: 'c/t',
+                                showSlideNumber: 'all',
+                                mouseWheel: 'yes'
+                        });
+                </script>
+</html>
+
+
